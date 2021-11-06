@@ -2,7 +2,6 @@ package com.luxoft.datastructures.list;
 
 import com.luxoft.datastructures.list.List;
 
-import javax.management.ObjectName;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -126,7 +125,7 @@ public class ArrayList implements List {
   public boolean contains(Object item) {
     if(size == 0) return false;
     for(int i=0; i<size; i++){
-      if(array[i].equals(item)) return true;
+      if(Objects.equals(array[i], item)) return true;
     }
 
     return false;
@@ -147,7 +146,7 @@ public class ArrayList implements List {
   public int indexOf(Object item) {
     if(size == 0) return -1;
     for(int i=0; i<size; i++){
-      if(array[i].equals(item)) return i;
+      if(Objects.equals(array[i], item)) return i;
     }
 
     return -1;
@@ -162,7 +161,7 @@ public class ArrayList implements List {
   public int lastIndexOf(Object item) {
     if(size == 0) return -1;
     for(int i=size-1; i>=0; i--){
-      if(array[i].equals(item)) return i;
+      if(Objects.equals(array[i], item)) return i;
     }
     return -1;
   }

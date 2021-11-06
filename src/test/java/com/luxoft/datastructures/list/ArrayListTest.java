@@ -42,7 +42,7 @@ public class ArrayListTest {
     assertFalse(arrayList.isEmpty());
   };
 
-  // Добавление нулевого элемента
+  // withNull
   @DisplayName("Default constructor (with NULL), isEmpty and Add method")
   @Test
   public void testDefaultConstructorAndAddMethodWidthNull(){
@@ -66,7 +66,7 @@ public class ArrayListTest {
     assertEquals(testOrigin.size(), origin.size());
   };
 
-  // Добавление нулевого элемента
+  // withNull
   @DisplayName("Constructor *(WithNull) width List")
   @Test
   public void testConstructorWidthListWithNull(){
@@ -103,6 +103,7 @@ public class ArrayListTest {
     assertEquals("C", arrayList.get(3));
   }
 
+  // withNull
   @DisplayName("#4.1: (NULL) Add width index and get")
   @Test
   public void testAddMethodsWidthIndexWithNull(){
@@ -132,17 +133,34 @@ public class ArrayListTest {
     assertEquals("C", arrayList.get(3));
   }
 
+  // withNull
+  @DisplayName("Add list (NULL)")
+  @Test
+  public void testAddAllOfListWithNull(){
+    List arrayList = new ArrayList();
+    assertTrue(arrayList.isEmpty());
+    arrayList.add(null);
+
+    List listSourse = new ArrayList(new String[]{"A", null, "C"});
+    assertTrue(arrayList.addAll(listSourse));
+    assertEquals(4, arrayList.size());
+    assertNull(arrayList.get(0));
+    assertEquals("A", arrayList.get(1));
+    assertNull(arrayList.get(2));
+    assertEquals("C", arrayList.get(3));
+  }
+
   @DisplayName("Add array")
   @Test
   public void testAddAllOfArray(){
     List arrayList = new ArrayList();
     assertTrue(arrayList.isEmpty());
-    arrayList.add("AA");
+    arrayList.add(null);
 
     String[] arrSource = new String[]{"A", "B", "C"};
     assertTrue(arrayList.addAll(arrSource));
     assertEquals(4, arrayList.size());
-    assertEquals("AA", arrayList.get(0));
+    assertNull(arrayList.get(0));
     assertEquals("A", arrayList.get(1));
     assertEquals("B", arrayList.get(2));
     assertEquals("C", arrayList.get(3));
@@ -155,19 +173,17 @@ public class ArrayListTest {
     assertTrue(arrayList.isEmpty());
     arrayList.add("AA");
     arrayList.add("BB");
-    arrayList.add("CC");
+    arrayList.add(null);
 
-    List listSource = new ArrayList(new String[]{"A", "B", "C"});
-//    String[] expected = new String[]{"AA", "A", "B", "C", "BB", "CC"};
-
+    List listSource = new ArrayList(new String[]{"A", null, "C"});
     assertTrue(arrayList.addAll(1, listSource));
     assertEquals(6, arrayList.size());
     assertEquals("AA", arrayList.get(0));
     assertEquals("A", arrayList.get(1));
-    assertEquals("B", arrayList.get(2));
+    assertNull(arrayList.get(2));
     assertEquals("C", arrayList.get(3));
     assertEquals("BB", arrayList.get(4));
-    assertEquals("CC", arrayList.get(5));
+    assertNull(arrayList.get(5));
   }
 
   @DisplayName("Add all (array) width index")
@@ -175,33 +191,34 @@ public class ArrayListTest {
   public void testAddAllOfArrayWidthIndex(){
     List arrayList = new ArrayList();
     assertTrue(arrayList.isEmpty());
-    arrayList.add("AA");
+    arrayList.add(null);
     arrayList.add("BB");
     arrayList.add("CC");
 
-    String[] arrSource = new String[]{"A", "B", "C"};
-    String[] expected = new String[]{"AA", "A", "B", "C", "BB", "CC"};
+    String[] arrSource = new String[]{"A", null, "C"};
+    String[] expected = new String[]{null, "A", null, "C", "BB", "CC"};
 
     assertTrue(arrayList.addAll(1, arrSource));
     assertEquals(6, arrayList.size());
-    assertEquals("AA", arrayList.get(0));
+    assertNull(arrayList.get(0));
     assertEquals("A", arrayList.get(1));
-    assertEquals("B", arrayList.get(2));
+    assertNull(arrayList.get(2));
     assertEquals("C", arrayList.get(3));
     assertEquals("BB", arrayList.get(4));
     assertEquals("CC", arrayList.get(5));
+    assertArrayEquals(expected, arrayList.toArray());
   }
 
   @Test
   public void testClear(){
-    List arrayList = new ArrayList(new String[]{"A", "B", "C"});
+    List arrayList = new ArrayList(new String[]{"A", null, "C"});
     assertFalse(arrayList.isEmpty());
     assertEquals(3, arrayList.size());
 
     arrayList.clear();
     assertTrue(arrayList.isEmpty());
+    assertEquals(0, arrayList.size());
   }
-
 
   @Test
   public void testClone(){
@@ -223,12 +240,22 @@ public class ArrayListTest {
     assertFalse(arrayList.contains("D"));
   }
 
+  // withNull
+  @DisplayName("Contains with NULL")
+  @Test
+  public void testContainsWithNull(){
+    List arrayList = new ArrayList(new String[]{"A", "B", null});
+    assertTrue(arrayList.contains("B"));
+    assertTrue(arrayList.contains(null));
+    assertFalse(arrayList.contains("D"));
+  }
+
   @Test
   public void testGet(){
-    List arrayList = new ArrayList(new String[]{"A", "B", "C"});
+    List arrayList = new ArrayList(new String[]{"A", null, "C"});
 
     assertEquals("A", arrayList.get(0));
-    assertEquals("B", arrayList.get(1));
+    assertNull(arrayList.get(1));
     assertEquals("C", arrayList.get(2));
     assertThrows(IndexOutOfBoundsException.class, () -> arrayList.get(-1));
     assertThrows(IndexOutOfBoundsException.class, () -> arrayList.get(3));
@@ -236,17 +263,20 @@ public class ArrayListTest {
 
   @Test
   public void testIndexOf(){
-    List arrayList = new ArrayList(new String[]{"A", "B", "C"});
+    List arrayList = new ArrayList(new String[]{"A", "B", "C", null});
     assertEquals(2, arrayList.indexOf("C"));
     assertEquals(-1, arrayList.indexOf("D"));
+    assertEquals(3, arrayList.indexOf(null));
+
   }
 
   @Test
   public void testLastIndexOf(){
-    List arrayList = new ArrayList(new String[]{"A", "B", "C", "A"});
+    List arrayList = new ArrayList(new String[]{"A", "B", "C", "A", null});
     assertEquals(3, arrayList.lastIndexOf("A"));
     assertNotEquals(2, arrayList.lastIndexOf("A"));
-    assertEquals(-1, arrayList.indexOf("D"));
+    assertEquals(-1, arrayList.lastIndexOf("D"));
+    assertEquals(4, arrayList.lastIndexOf(null));
   }
 
   @DisplayName("Remove by index")
@@ -256,15 +286,20 @@ public class ArrayListTest {
     assertFalse(emptyArrayList.remove(2));
     assertEquals(0, emptyArrayList.size());
 
-    List arrayList = new ArrayList(new String[]{"A", "B", "C", "D"});
-    assertEquals(4, arrayList.size());
+    List arrayList = new ArrayList(new String[]{"A", "B", "C", "D", null});
+    assertEquals(5, arrayList.size());
 
     assertTrue(arrayList.remove(2)); // удаляем С
-    assertEquals(3, arrayList.size());
+    assertEquals(4, arrayList.size());
     assertTrue(arrayList.remove(1)); // удаляем B
+    assertEquals(3, arrayList.size());
+
+    String[] expected = new String[]{"A", "D", null};
+    assertArrayEquals(expected, arrayList.toArray());
+    assertTrue(arrayList.remove(2)); // удаляем null
     assertEquals(2, arrayList.size());
 
-    String[] expected = new String[]{"A", "D"};
+    expected = new String[]{"A", "D"};
     assertArrayEquals(expected, arrayList.toArray());
   }
 
@@ -287,16 +322,19 @@ public class ArrayListTest {
     assertTrue(arrayListOne.isEmpty());
 
     // много элементов
-    List arrayList = new ArrayList(new String[]{"A", "B", "C", "D"});
-    assertEquals(4, arrayList.size());
+    List arrayList = new ArrayList(new String[]{"A", "B", "C", "D", null});
+    assertEquals(5, arrayList.size());
 
     assertTrue(arrayList.remove("C")); // удаляем С
-    assertEquals(3, arrayList.size());
+    assertEquals(4, arrayList.size());
     assertTrue(arrayList.remove("B")); // удаляем B
-    assertEquals(2, arrayList.size());
+    assertEquals(3, arrayList.size());
 
-    String[] expected = new String[]{"A", "D"};
+    String[] expected = new String[]{"A", "D", null};
     assertArrayEquals(expected, arrayList.toArray());
-
+    assertTrue(arrayList.remove(null)); // удаляем null
+    assertEquals(2, arrayList.size());
+    expected = new String[]{"A", "D"};
+    assertArrayEquals(expected, arrayList.toArray());
   }
 }
