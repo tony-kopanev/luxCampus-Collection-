@@ -21,6 +21,7 @@ public interface List {
   public boolean remove(int index);
   public boolean remove(Object item);
   public boolean removeAll(List list);
+  public boolean removeAll(Object[] arrayRemove);
   public boolean set(int index, Object item);
   public int size();
 

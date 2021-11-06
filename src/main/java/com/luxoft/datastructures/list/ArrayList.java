@@ -211,11 +211,35 @@ public class ArrayList implements List {
 
   @Override
   public boolean removeAll(List list) {
-    return false;
+    if(size <= 0) return false;
+    else if(Objects.isNull(list) || list.size() == 0) return true;
+
+    int j = 0;
+    Object[] newArray = new Object[capacity];
+    for(int i=0; i<size; i++){
+      if(!list.contains(array[i])){
+        newArray[j] = array[i];
+        j++;
+      }
+    }
+
+    size = j;
+    array = newArray;
+    return true;
+  }
+
+  @Override
+  public boolean removeAll(Object[] arrayRemove) {
+    if(size <= 0) return false;
+    else if(Objects.isNull(arrayRemove) || arrayRemove.length == 0) return true;
+
+    List listRemove = new ArrayList(arrayRemove);
+    return removeAll(listRemove);
   }
 
   @Override
   public boolean set(int index, Object item) {
+
     return false;
   }
 

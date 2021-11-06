@@ -238,6 +238,7 @@ public class ArrayListTest {
     List arrayList = new ArrayList(new String[]{"A", "B", "C"});
     assertTrue(arrayList.contains("B"));
     assertFalse(arrayList.contains("D"));
+    assertFalse(arrayList.contains(null));
   }
 
   // withNull
@@ -336,5 +337,109 @@ public class ArrayListTest {
     assertEquals(2, arrayList.size());
     expected = new String[]{"A", "D"};
     assertArrayEquals(expected, arrayList.toArray());
+  }
+
+  @DisplayName("#5: Remove all, by List, from empty list")
+  @Test
+  public void testRemoveAllByListFromEmotyList(){
+    List emptyArrayList = new ArrayList();
+    List valueList = new ArrayList(new String[]{"A", "B", "C", "D", null});
+    assertFalse(emptyArrayList.remove(valueList));
+    assertEquals(0, emptyArrayList.size());
+    assertTrue(emptyArrayList.isEmpty());
+  }
+
+  @DisplayName("#5.1: Remove all, by list")
+  @Test
+  public void testRemoveAllByList(){
+    List arrayList = new ArrayList(new String[]{"A", "B", "C", "D", null});
+    List valueList = new ArrayList(new String[]{"B", "C", null, "EE"});
+    assertTrue(arrayList.removeAll(valueList));
+    assertEquals(2, arrayList.size());
+    assertFalse(arrayList.isEmpty());
+
+    Object[] expected = new Object[]{"A", "D"};
+    assertArrayEquals(expected, arrayList.toArray());
+  }
+
+  @DisplayName("#5.2: Remove all, by array")
+  @Test
+  public void testRemoveAllByArray(){
+    List arrayList = new ArrayList(new String[]{"A", "B", "C", "D", null});
+    String[] arrayRemove = new String[]{"B", "C", null, "EE"};
+    assertTrue(arrayList.removeAll(arrayRemove));
+    assertEquals(2, arrayList.size());
+    assertFalse(arrayList.isEmpty());
+
+    Object[] expected = new Object[]{"A", "D"};
+    assertArrayEquals(expected, arrayList.toArray());
+  }
+
+  @DisplayName("#5.3: Remove all, with empty list and array")
+  @Test
+  public void testRemoveAllWithEmptyListAndArray(){
+    // тест с пустыми листами и массивами
+    List arrayList = new ArrayList(new String[]{"A", "B", "C", "D", null});
+    List removeList = new ArrayList();
+    Object[] removeArray = new Object[0];
+
+    assertTrue(arrayList.removeAll(removeList));
+    assertTrue(arrayList.removeAll(removeArray));
+    assertEquals(5, arrayList.size());
+
+    // тест с нулевыми листами и массивами
+    List removeListNull = null;
+    Object[] removeArrayNull = null;
+
+    assertTrue(arrayList.removeAll(removeListNull));
+    assertTrue(arrayList.removeAll(removeArrayNull));
+    assertEquals(5, arrayList.size());
+
+    // тест с пустым исходящим (оригинальным) листом
+    List emptyArrayList = new ArrayList();
+    assertFalse(emptyArrayList.removeAll(removeList));
+    assertFalse(emptyArrayList.removeAll(removeArray));
+    assertFalse(emptyArrayList.removeAll(removeListNull));
+    assertFalse(emptyArrayList.removeAll(removeArrayNull));
+    assertFalse(emptyArrayList.removeAll(arrayList));
+  }
+
+  @Test
+  public void testSet(){
+    List arrayList = new ArrayList(new String[]{"A", "B", "C", "D", null});
+    assertTrue(arrayList.set(3, "CC"));
+    assertEquals(6, arrayList.size());
+    assertEquals("CC", arrayList.get(3));
+
+    Object[] expected = new Object[]{"A", "B", "C", "CC", "D", null};
+    assertArrayEquals(expected, arrayList.toArray());
+
+    // добавляем null в середину
+    assertTrue(arrayList.set(3, null));
+    assertEquals(7, arrayList.size());
+    assertNull(arrayList.get(3));
+
+    expected = new Object[]{"A", "B", "C", null, "CC", "D", null};
+    assertArrayEquals(expected, arrayList.toArray());
+
+    // добавление в середину пустого массив
+    List emptyArrayList = new ArrayList();
+    assertFalse(emptyArrayList.set(3, "test"));
+    assertTrue(emptyArrayList.isEmpty());
+
+    // добавление в начало листа
+    assertTrue(arrayList.set(0, "firstElement"));
+    assertEquals(8, arrayList.size());
+    assertEquals("firstElement", arrayList.get(0));
+
+    expected = new Object[]{"firstElement", "A", "B", "C", null, "CC", "D", null};
+    assertArrayEquals(expected, arrayList.toArray());
+
+    // добавление в начало пустого листа
+    assertTrue(emptyArrayList.isEmpty());
+    assertTrue(emptyArrayList.set(0, "firstElement"));
+    assertFalse(emptyArrayList.isEmpty());
+    assertEquals(1, emptyArrayList.size());
+    assertEquals("firstElement", emptyArrayList.get(0));
   }
 }
