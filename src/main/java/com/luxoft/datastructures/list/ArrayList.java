@@ -40,7 +40,7 @@ public class ArrayList implements List {
   }
 
   private void ensureCapacity(int minCapacity){
-    if(minCapacity > capacity){
+    if(minCapacity >= capacity){
       capacity = (int)(minCapacity * 1.5);
       Object[] newArr = new Object[capacity];
       System.arraycopy(array, 0, newArr, 0, array.length);
@@ -239,8 +239,23 @@ public class ArrayList implements List {
 
   @Override
   public boolean set(int index, Object item) {
+    if(index < 0 || index > size) {
+      String exText = index < 0
+        ? String.format("Your index %d can`t be less 0", index)
+        : String.format("Your index %d can`t be more size: %d", index, size);
+      throw new IndexOutOfBoundsException(exText);
+    }
+    if(index == 0 && size <= 0) {
+      array[0] = item;
+      size = 1;
+      return true;
+    }
 
-    return false;
+    size++;
+    ensureCapacity(size);
+    System.arraycopy(array, index, array, index+1, size-index);
+    array[index] = item;
+    return true;
   }
 
   @Override

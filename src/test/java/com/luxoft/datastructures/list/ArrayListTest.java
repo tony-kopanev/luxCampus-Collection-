@@ -423,8 +423,10 @@ public class ArrayListTest {
     assertArrayEquals(expected, arrayList.toArray());
 
     // добавление в середину пустого массив
+    // должно быть проброшено исключение IndexOutOfBoundsException
     List emptyArrayList = new ArrayList();
-    assertFalse(emptyArrayList.set(3, "test"));
+    assertThrows(IndexOutOfBoundsException.class, () -> emptyArrayList.set(3, "test"));
+    assertThrows(IndexOutOfBoundsException.class, () -> emptyArrayList.set(-3, "test"));
     assertTrue(emptyArrayList.isEmpty());
 
     // добавление в начало листа
@@ -441,5 +443,28 @@ public class ArrayListTest {
     assertFalse(emptyArrayList.isEmpty());
     assertEquals(1, emptyArrayList.size());
     assertEquals("firstElement", emptyArrayList.get(0));
+  }
+
+  @Test
+  public void testManyOfAddAndSetAndRemove(){
+    List arrayList = new ArrayList();
+    for(int i=0; i<50; i++){
+      assertTrue(arrayList.add("Element_" + i));
+      assertEquals(i+1, arrayList.size());
+    }
+
+    assertFalse(arrayList.isEmpty());
+
+    for(int i=0; i<20; i++){
+      assertTrue(arrayList.set(15+i, "Element_" + (i+49+1)));
+      assertEquals(i+50+1, arrayList.size());
+    }
+
+    for(int i=69; i>=0; i--){
+      assertTrue(arrayList.remove(arrayList.size()-1));
+      assertEquals(i, arrayList.size());
+    }
+
+    assertTrue(arrayList.isEmpty());
   }
 }
