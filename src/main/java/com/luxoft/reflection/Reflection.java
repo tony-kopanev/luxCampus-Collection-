@@ -10,10 +10,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class Reflection {
-  public static void main(String[] args) throws ClassNotFoundException {
-//    getSignaturesWithFinal(new MySomeClass());
-
-  }
+//  public static void main(String[] args) throws ClassNotFoundException {
+//  }
 
 
   // Метод принимает класс и возвращает созданный объект этого класса
@@ -45,7 +43,6 @@ public class Reflection {
   }
 
   //  Метод принимает Class и выводит все не публичные методы этого класса
-
   public static String[] getPrivateMethodsOfClass(Class clazz){
     Arrays.stream(MySomeClass.class.getDeclaredMethods())
             .filter(method -> Modifier.isPrivate(method.getModifiers()))
@@ -56,5 +53,25 @@ public class Reflection {
             .filter(method -> Modifier.isPrivate(method.getModifiers()))
             .map(Method::toString)
             .toArray(String[]::new);
+  }
+
+  // Метод принимает Class и выводит всех предков класса и все интерфейсы которое класс имплементирует
+  public static String[] getAllParentOfTheClasAndInterFaces(Class clazz){
+    List<String> result = new ArrayList<>();
+    Class curInstance = clazz;
+    while (true){
+      // заносим все интерфейсы в result, ну и выводим на экран
+      Arrays.stream(curInstance.getInterfaces()).forEach(interf -> result.add(interf.getName()));
+      Arrays.stream(curInstance.getInterfaces()).forEach(interf -> System.out.println(interf.getName()));
+      // получим класс родитель и запишем в result
+      curInstance = curInstance.getSuperclass();
+      // выводим предка
+      result.add(curInstance.getName());
+      System.out.println(curInstance.getName());
+      // возвращаем результат, когда доберемся до родителя Object
+      if(curInstance.getSimpleName().equals("Object")){
+        return result.toArray(String[]::new);
+      }
+    }
   }
 }

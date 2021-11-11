@@ -60,6 +60,25 @@ public class ReflectionTest {
     assertArrayEquals(expected, actual);
   }
 
+  // Метод принимает Class и выводит всех предков класса и все интерфейсы которое класс имплементирует
+  // Для теста помимо вывода, результат сохраняю в массив, и сравниваю массивы
+  @Test
+  public void testGetAllParentOfTheClasAndInterFaces(){
+    String[] expected = new String[]{
+      "java.util.List",
+      "java.util.RandomAccess",
+      "java.lang.Cloneable",
+      "java.io.Serializable",
+      "java.util.AbstractList",
+      "java.util.List",
+      "java.util.AbstractCollection",
+      "java.util.Collection",
+      "java.lang.Object"
+    };
 
-
+    String[] actual = Reflection.getAllParentOfTheClasAndInterFaces(ArrayList.class);
+    assertNotNull(actual);
+    assertEquals(9, actual.length);
+    assertArrayEquals(expected, actual);
+  }
 }
