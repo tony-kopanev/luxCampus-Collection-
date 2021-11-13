@@ -81,4 +81,16 @@ public class ReflectionTest {
     assertEquals(9, actual.length);
     assertArrayEquals(expected, actual);
   }
+
+  // Метод принимает объект и меняет всего его приватные поля на их нулевые значение (null, 0, false etc)+
+  @Test
+  public void testSetNullsValuesPrivatFields() throws IllegalAccessException {
+    MySomeClass mySomeClass = new MySomeClass("Mike", 111, 56, true);
+    Reflection.setNullsValuesPrivatFields(mySomeClass);
+
+    assertNull(mySomeClass.getName());
+    assertEquals(0, mySomeClass.getId());
+    assertEquals(0, mySomeClass.getAge());
+    assertFalse(mySomeClass.isSex());
+  }
 }

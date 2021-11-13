@@ -10,8 +10,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class Reflection {
-//  public static void main(String[] args) throws ClassNotFoundException {
-//  }
+  public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException {
+    MySomeClass mySomeClass = new MySomeClass("Mike", 111, 56, true);
+    Reflection.setNullsValuesPrivatFields(mySomeClass);
+  }
 
 
   // Метод принимает класс и возвращает созданный объект этого класса
@@ -71,6 +73,23 @@ public class Reflection {
       // возвращаем результат, когда доберемся до родителя Object
       if(curInstance.getSimpleName().equals("Object")){
         return result.toArray(String[]::new);
+      }
+    }
+  }
+
+  // Метод принимает объект и меняет всего его приватные поля на их нулевые значение (null, 0, false etc)+
+  public static void setNullsValuesPrivatFields(Object object) throws IllegalAccessException {
+    List<String> primitives = new ArrayList<>(List.of(new String[]{"int", "byte", "double", "long"}));
+    for(Field f: object.getClass().getDeclaredFields()){
+      if(Modifier.isPrivate(f.getModifiers())){
+        f.setAccessible(true);
+        if(primitives.contains(f.getType().toString())){
+          f.set(object, 0);
+        } else if(f.getType().toString().equals("boolean")){
+          f.set(object, false);
+        } else {
+          f.set(object, null);
+        }
       }
     }
   }
