@@ -9,4 +9,10 @@ public class FileManagerTest {
     int actual = FileManager.countFiles("src/test/resources");
     assertEquals(7, actual);
   }
+
+  @Test
+  public void testCountDirs(){
+    int actual = FileManager.countDirs("src/test/resources");
+    assertEquals(3, actual);
+  }
 }
