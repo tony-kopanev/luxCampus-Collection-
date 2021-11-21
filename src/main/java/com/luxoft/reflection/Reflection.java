@@ -6,15 +6,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Reflection {
-  public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException {
-    MySomeClass mySomeClass = new MySomeClass("Mike", 111, 56, true);
-    Reflection.setNullsValuesPrivatFields(mySomeClass);
-  }
-
 
   // Метод принимает класс и возвращает созданный объект этого класса
   public static Object setNewInstance(Class<MySomeClass> clazz) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
