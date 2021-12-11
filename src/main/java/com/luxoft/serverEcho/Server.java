@@ -9,10 +9,10 @@ import java.nio.charset.StandardCharsets;
 
 public class Server {
   public static void main(String[] args) throws IOException {
-    while (true){
-      ServerSocket serverSocket = new ServerSocket(3000);
-      Socket socket = serverSocket.accept();
+    ServerSocket serverSocket = new ServerSocket(3000);
+    Socket socket = serverSocket.accept();
 
+    while (true){
       // get test message
       InputStream inputStream = socket.getInputStream();
       byte[] buffer = new byte[100];
@@ -22,6 +22,9 @@ public class Server {
       // send answer message, with prefix "echo"
       OutputStream outputStream = socket.getOutputStream();
       outputStream.write(message.getBytes(StandardCharsets.UTF_8));
+
+//      inputStream.close();
+//      outputStream.close();
     }
   }
 }
