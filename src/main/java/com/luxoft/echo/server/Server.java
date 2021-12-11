@@ -1,4 +1,4 @@
-package com.luxoft.serverEcho;
+package com.luxoft.echo.server;
 
 import java.io.IOException;
 import java.io.InputStream;

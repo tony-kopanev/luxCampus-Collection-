@@ -1,4 +1,4 @@
-package com.luxoft.serverEcho;
+package com.luxoft.echo.client;
 
 import java.io.*;
 import java.net.Socket;
@@ -41,5 +41,4 @@ public class Client {
 //    return bufferedReader.readLine();
     return messageS;
   }
-//  15_01:04:26
 }
