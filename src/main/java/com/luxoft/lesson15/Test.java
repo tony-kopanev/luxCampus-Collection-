@@ -10,8 +10,9 @@ public class Test {
 
 class ApplicationContext {
   static UserDao getUserDao() {
-    return new UserDao();
+    TransactionUserDao transactionUserDao = new TransactionUserDao(new DbUserDao());
+    return new LogInUserDao(transactionUserDao);
   }
 }
 
-//  15_01:04:26
+//  15_01:12:00
