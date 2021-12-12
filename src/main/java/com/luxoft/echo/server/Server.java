@@ -1,30 +1,23 @@
 package com.luxoft.echo.server;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 public class Server {
   public static void main(String[] args) throws IOException {
-    ServerSocket serverSocket = new ServerSocket(3000);
-    Socket socket = serverSocket.accept();
 
-    while (true){
-      // get test message
-      InputStream inputStream = socket.getInputStream();
-      byte[] buffer = new byte[100];
-      int count = inputStream.read(buffer);
-      String message = "echo: " + new String(buffer, 0, count);
+    try(    ServerSocket serverSocket = new ServerSocket(3000);
+            Socket socket = serverSocket.accept();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))){
+      while (true){
+        // get test message
+        String message = "echo: " + bufferedReader.readLine() + "\n";
 
-      // send answer message, with prefix "echo"
-      OutputStream outputStream = socket.getOutputStream();
-      outputStream.write(message.getBytes(StandardCharsets.UTF_8));
-
-//      inputStream.close();
-//      outputStream.close();
+        bufferedWriter.write(message);
+        bufferedWriter.flush();
+      }
     }
   }
 }

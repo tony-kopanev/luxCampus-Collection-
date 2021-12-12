@@ -2,32 +2,27 @@ package com.luxoft.echo.client;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 public class Client {
   public static void main(String[] args) {
 
     try(Socket socket = new Socket("localhost", 3000);
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        OutputStream outputStream = socket.getOutputStream();
-        InputStream inputStream = socket.getInputStream();) {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
 
-      byte[] buffer = new byte[100];
 
       while (true) {
         // send test message
         String message = readClientInput(reader);
 
-        outputStream.write(message.getBytes(StandardCharsets.UTF_8));
+        bufferedWriter.write(message);
+        bufferedWriter.flush();
         System.out.println("Sending to server: " + message);
 
         // get answer from server
-        int count = inputStream.read(buffer);
-        String answerMess = new String(buffer, 0, count);
+        String answerMess = bufferedReader.readLine();
         System.out.println("Answer from server: " + answerMess);
-
-//      outputStream.close();
-//      inputStream.close();
       }
     } catch(IOException ex){
       ex.printStackTrace();
@@ -37,7 +32,7 @@ public class Client {
   static String readClientInput(BufferedReader bufferedReader) throws IOException {
     System.out.println("Hey user, give me some text!");
     String messageS = null;
-    messageS = bufferedReader.readLine();
+    messageS = bufferedReader.readLine() + "\n";
 //    return bufferedReader.readLine();
     return messageS;
   }
